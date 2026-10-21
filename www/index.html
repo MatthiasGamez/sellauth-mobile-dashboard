@@ -1,96 +1,158 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0e1116"><title>SA Dashboard</title>
+<title>SellAuth Dashboard</title>
 <style>
-:root{--bg:#0e1116;--sf:#171c24;--sf2:#202734;--tx:#e8ecf1;--mu:#8b96a8;--ac:#7c8cff;--ok:#4ad6a0;--bad:#ff7a8a;--warn:#f5c26b}
+html{--bg:#0d1117;--sf:#151b23;--sf2:#1d2530;--tx:#e8edf3;--mu:#8693a5;--ln:#222c38;--ok:#4ad6a0;--bad:#ff7a8a;--warn:#f5c26b;--ac:#7c8cff}
+html[data-t=light]{--bg:#f3f5f8;--sf:#fff;--sf2:#e9edf2;--tx:#121821;--mu:#667386;--ln:#dde3ea;--ok:#12a36b;--bad:#d9475c;--warn:#b87d12}
+html[data-t=amoled]{--bg:#000;--sf:#0b0d10;--sf2:#14181d;--ln:#1a1f26}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,Roboto,sans-serif;padding:env(safe-area-inset-top) 0 0}
-#app{max-width:560px;margin:0 auto;padding:16px 16px 96px}
-h1{font-size:15px;font-weight:600;color:var(--mu);margin:0}
-.big{font-size:44px;font-weight:700;letter-spacing:-1px;margin:4px 0 2px}
-.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}
-.card{background:var(--sf);border-radius:16px;padding:16px;margin:12px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .card{margin:0}
-.k{color:var(--mu);font-size:13px}.v{font-size:22px;font-weight:650}
-input,select,button{font:inherit;color:var(--tx);background:var(--sf2);border:0;border-radius:12px;padding:13px 14px;width:100%}
-button{background:var(--ac);color:#0b0e1a;font-weight:650;cursor:pointer}
-button.g{background:var(--sf2);color:var(--tx);width:auto;padding:10px 14px}
-.inv{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--sf2)}
-.inv:last-child{border:0}.pill{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sf2)}
-.completed,.paid{color:var(--ok)}.pending{color:var(--warn)}.cancelled,.refunded,.failed{color:var(--bad)}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--sf);padding:8px 8px calc(8px + env(safe-area-inset-bottom));gap:6px}
-nav button{background:none;color:var(--mu);padding:10px 4px;font-size:14px}nav button.on{color:var(--tx);background:var(--sf2)}
-.bars{display:flex;align-items:flex-end;gap:4px;height:90px;margin-top:10px}
-.bars i{flex:1;background:var(--ac);border-radius:4px 4px 0 0;min-height:2px;opacity:.85}
-pre{white-space:pre-wrap;word-break:break-all;font-size:12px;color:var(--mu)}
-.hide .amt{filter:blur(8px)}.err{color:var(--bad);font-size:14px;margin-top:8px}
-</style></head><body><div id="app"></div>
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Roboto,sans-serif;font-variant-numeric:tabular-nums;padding-top:env(safe-area-inset-top)}
+#app{max-width:560px;margin:0 auto;padding:14px 16px calc(96px + env(safe-area-inset-bottom))}
+h1{font-size:20px;margin:0;font-weight:650;letter-spacing:-.3px}h2{font-size:14px;margin:0 0 10px;color:var(--mu);font-weight:600}
+.row{display:flex;align-items:center;gap:10px}.sp{justify-content:space-between}.k{color:var(--mu);font-size:13px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:20px;padding:16px;margin:12px 0}
+.big{font-size:50px;font-weight:700;letter-spacing:-2.5px;line-height:1.05;margin:6px 0 8px}
+.dl{font-size:13px;font-weight:600;padding:3px 9px;border-radius:99px}.up{color:var(--ok);background:rgba(74,214,160,.14)}.dn{color:var(--bad);background:rgba(255,122,138,.14)}
+input[type=text],input[type=password],select{font:inherit;color:var(--tx);background:var(--sf2);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;width:100%}
+select{width:auto;max-width:55%;padding:9px 10px}
+button{font:inherit;cursor:pointer}.btn{width:100%;border:0;border-radius:14px;padding:13px;background:var(--ac);color:#0b0e14;font-weight:650}
+.g{background:var(--sf2);color:var(--tx);border:0;border-radius:12px;padding:9px 14px}
+.seg{display:flex;background:var(--sf2);border-radius:14px;padding:3px;margin:12px 0}.seg button{flex:1;background:none;border:0;color:var(--mu);padding:8px 0;border-radius:11px;font-size:13px;font-weight:600}
+.seg .on{background:var(--sf);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.ch svg{width:100%;height:120px;display:block;touch-action:pan-y;margin-top:8px}.cl{display:flex;justify-content:space-between;font-size:13px;color:var(--mu)}.cl b{color:var(--tx)}
+.ch rect{fill:var(--ac);opacity:.35}.ch rect.hl{opacity:1}.ar{fill:var(--ac);opacity:.14}.ln{fill:none;stroke:var(--ac);stroke-width:2;vector-effect:non-scaling-stroke}.sl{stroke:var(--mu);stroke-width:1;vector-effect:non-scaling-stroke}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.grid .card{margin:0;padding:14px}.v{font-size:22px;font-weight:650;letter-spacing:-.5px}
+.inv{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--ln)}.inv:last-child{border:0}.inv>div:nth-child(2){flex:1;min-width:0}
+.av{width:38px;height:38px;border-radius:12px;background:var(--sf2);display:grid;place-items:center;font-weight:650;color:var(--mu);flex:none}
+.ov{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.day{font-size:13px;color:var(--mu);display:flex;justify-content:space-between;padding:12px 0 2px}
+.pill{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sf2)}.completed,.paid,.delivered{color:var(--ok)}.pending{color:var(--warn)}.cancelled,.refunded,.failed,.expired{color:var(--bad)}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:10px 0}.chips button{border:1px solid var(--ln);background:none;color:var(--mu);border-radius:99px;padding:6px 14px;white-space:nowrap}.chips .on{background:var(--ac);color:#0b0e14;border-color:var(--ac)}
+.rk{position:relative;display:flex;justify-content:space-between;padding:9px 10px;margin:4px 0;border-radius:10px;overflow:hidden}.rk span,.rk b{position:relative}.rb{position:absolute;left:0;top:0;bottom:0;background:var(--ac);opacity:.16;border-radius:10px}
+.sr{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--ln)}.sr:last-child{border:0}
+.sw{position:relative;width:46px;height:28px;flex:none}.sw input{opacity:0;position:absolute;inset:0;width:100%;height:100%;margin:0}.sw i{position:absolute;inset:0;background:var(--sf2);border-radius:99px;transition:.15s;pointer-events:none}
+.sw i:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:var(--mu);transition:.15s}.sw input:checked+i{background:var(--ac)}.sw input:checked+i:after{left:21px;background:#0b0e14}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid transparent;margin-left:6px}.dot.on{border-color:var(--tx)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--sf);border-top:1px solid var(--ln);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:10}
+nav button{flex:1;background:none;border:0;color:var(--mu);font-size:11px;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:3px}nav .on{color:var(--ac)}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bd{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}.sh{position:fixed;left:0;right:0;bottom:0;max-height:85vh;overflow:auto;background:var(--sf);border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));z-index:21;animation:up .2s}
+@keyframes up{from{transform:translateY(30px);opacity:.4}}
+.sk{height:90px;border-radius:20px;margin:12px 0;background:linear-gradient(90deg,var(--sf),var(--sf2),var(--sf));background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translate(-50%,-90px);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:99px;font-weight:600;z-index:30;transition:.25s}#toast.show{transform:translate(-50%,0)}
+.hide .amt{filter:blur(9px)}.err{color:var(--bad);font-size:14px;margin:8px 0}.empty{text-align:center;color:var(--mu);padding:26px 0}
+.lk{text-align:center;padding-top:60px}.dots{display:flex;gap:14px;justify-content:center;margin:24px}.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--mu)}.dots .on{background:var(--ac);border-color:var(--ac)}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:280px;margin:0 auto}.kp button{height:64px;border-radius:50%;border:0;background:var(--sf2);color:var(--tx);font-size:22px}
+.spin{animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div id="app"></div><div id="toast"></div>
 <script>
-const API='https://api.sellauth.com/v1';
-const S={key:'',shops:[],shop:null,inv:[],tab:'home',q:'',hide:false,cur:'USD',loading:false,err:'',open:null};
-const $=s=>document.querySelector(s);
+const API='https://api.sellauth.com/v1',D=864e5,H=36e5;
 const ls={g:k=>{try{return localStorage.getItem(k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
-const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const money=n=>new Intl.NumberFormat(undefined,{style:'currency',currency:S.cur}).format(n||0);
-const amt=i=>Number(i.price_usd??i.price??i.total??i.amount??0);
-const done=i=>['completed','paid','delivered','complete'].includes(String(i.status||'').toLowerCase())||!!i.completed_at;
-const when=i=>new Date(i.completed_at||i.created_at||i.timestamp||0);
+const DEF={theme:'dark',accent:'#7c8cff',cur:'USD',compact:false,hide:false,pend:false,every:120,limit:750,per:'7d',chart:'bars',haptics:true,pin:'',notif:false,notifAmt:true};
+let P={...DEF};try{P={...DEF,...JSON.parse(ls.g('sa_prefs')||'{}')}}catch(e){}
+const S={key:ls.g('sa_key')||'',shops:[],shop:ls.g('sa_shop'),inv:[],tab:'home',q:'',f:'all',loading:false,err:'',open:null,sel:null,upd:null,first:true,locked:!!P.pin,pd:''};
+const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hash=s=>btoa('sa'+s);
+const Cp=n=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins[n];
+const runner=(event,details)=>{try{const b=Cp('BackgroundRunner');b&&b.dispatchEvent({label:'com.unofficial.sellauthdash.check',event,details})}catch(e){}};
+const syncRunner=()=>runner('saveConfig',{on:P.notif&&!!S.key,key:S.key,shop:S.shop,amt:P.notifAmt,cur:P.cur});
+async function notify(t,b){try{await Cp('LocalNotifications').schedule({notifications:[{id:Date.now()%2e9|0,title:t,body:b,schedule:{at:new Date(Date.now()+400)}}]})}catch(e){}}
+async function toggleNotif(on){const L=Cp('LocalNotifications');
+ if(on){if(!L){toast('Only works in the Android app');render();return}
+  try{let r=await L.checkPermissions();if(r.display!='granted')r=await L.requestPermissions();if(r.display!='granted'){toast('Allow notifications in Android settings');render();return}}catch(e){toast('Notifications unavailable');render();return}}
+ setP('notif',on);syncRunner()}
+function testNotif(){if(!Cp('LocalNotifications'))return toast('Only works in the Android app');notify('SellAuth Dashboard','Notifications work!');toast('Test sent')}
+function setP(k,v){P[k]=v;if(k=='notifAmt'||k=='cur')setTimeout(syncRunner,0);ls.s('sa_prefs',JSON.stringify(P));if(k=='every')timer();if(k=='limit')loadInvoices();render()}
+const money=n=>{n=n||0;const c=P.compact&&Math.abs(n)>=1e4;try{return new Intl.NumberFormat(undefined,{style:'currency',currency:P.cur,notation:c?'compact':'standard',maximumFractionDigits:c?1:2}).format(n)}catch(e){return n.toFixed(2)}};
+const amt=i=>Number(i.price_usd??i.price??i.total??i.amount??0),st=i=>String(i.status||'').toLowerCase();
+const done=i=>['completed','paid','delivered','complete'].includes(st(i))||!!i.completed_at,rev=i=>done(i)||(P.pend&&st(i)=='pending');
+const when=i=>new Date(i.completed_at||i.created_at||i.timestamp||0),mail=i=>i.email||i.customer_email||'';
+function toast(m){const t=$('#toast');t.textContent=m;t.className='show';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',3200)}
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied')).catch(()=>toast('Copy failed'))}
 async function api(p){const r=await fetch(API+p,{headers:{Authorization:'Bearer '+S.key,Accept:'application/json'}});
  if(r.status===401)throw Error('Invalid API key (401)');if(!r.ok)throw Error('API error '+r.status);return r.json()}
-async function loadInvoices(){S.loading=true;S.err='';render();let all=[];
- try{for(let p=1;p<=15;p++){const j=await api(`/shops/${S.shop}/invoices?page=${p}&per_page=100`);
+async function loadInvoices(quiet){S.loading=true;S.err='';if(!quiet)render();let all=[];
+ try{for(let p=1;p<=Math.ceil(P.limit/100);p++){const j=await api(`/shops/${S.shop}/invoices?page=${p}&per_page=100`);
   const d=Array.isArray(j)?j:(j.data||[]);all=all.concat(d);if(Array.isArray(j)||!j.next_page_url||!d.length)break}
-  S.inv=all}catch(e){S.err=e.message}S.loading=false;render()}
+  const old=new Set(S.inv.filter(done).map(i=>i.id));S.inv=all;S.upd=new Date();
+  if(!S.first){const nw=all.filter(i=>done(i)&&!old.has(i.id));if(nw.length){toast(`New sale${nw.length>1?'s':''}: ${money(nw.reduce((a,i)=>a+amt(i),0))}`);if(P.haptics&&navigator.vibrate)navigator.vibrate([60,40,60]);if(P.notif&&document.hidden)notify(nw.length>1?nw.length+' new sales':'New sale',P.notifAmt?money(nw.reduce((a,i)=>a+amt(i),0)):'Open the app to see details')}}
+  if(P.notif)runner('markSeen',{ids:all.filter(done).slice(0,30).map(i=>i.id)});
+  S.first=false}catch(e){S.err=e.message}S.loading=false;render()}
 async function login(){const el=$('#k');if(el)S.key=el.value.trim();S.err='';if(!S.key)return;
  try{const j=await api('/shops');S.shops=Array.isArray(j)?j:(j.data||[]);ls.s('sa_key',S.key);
-  S.shop=ls.g('sa_shop')||S.shops[0]?.id;if(!S.shops.find(s=>String(s.id)==String(S.shop)))S.shop=S.shops[0]?.id;
-  await loadInvoices()}catch(e){S.err=e.message;render()}}
-function logout(){ls.s('sa_key','');S.key='';S.inv=[];S.shops=[];render()}
-function sum(f){return S.inv.filter(i=>done(i)&&f(when(i))).reduce((a,i)=>a+amt(i),0)}
-function home(){const n=new Date(),sod=new Date(n.getFullYear(),n.getMonth(),n.getDate());
- const d7=new Date(sod-6*864e5),d30=new Date(sod-29*864e5);
- const days=[...Array(14)].map((_,k)=>{const a=new Date(sod-(13-k)*864e5),b=new Date(+a+864e5);return sum(t=>t>=a&&t<b)});
- const mx=Math.max(...days,1);const paid=S.inv.filter(done);
- return `<div class="card"><h1>Today</h1><div class="big amt">${money(sum(t=>t>=sod))}</div>
- <div class="bars amt">${days.map(v=>`<i style="height:${v/mx*100}%"></i>`).join('')}</div><div class="k" style="margin-top:6px">Last 14 days</div></div>
- <div class="grid"><div class="card"><div class="k">7 days</div><div class="v amt">${money(sum(t=>t>=d7))}</div></div>
- <div class="card"><div class="k">30 days</div><div class="v amt">${money(sum(t=>t>=d30))}</div></div>
- <div class="card"><div class="k">All loaded</div><div class="v amt">${money(sum(()=>true))}</div></div>
- <div class="card"><div class="k">Avg. order</div><div class="v amt">${money(paid.length?paid.reduce((a,i)=>a+amt(i),0)/paid.length:0)}</div></div>
- <div class="card"><div class="k">Paid orders</div><div class="v">${paid.length}</div></div>
- <div class="card"><div class="k">Unpaid / other</div><div class="v">${S.inv.length-paid.length}</div></div></div>
- <div class="k" style="margin-top:10px">Based on ${S.inv.length} loaded invoices (max 1500).</div>`}
-function list(){const q=S.q.toLowerCase();
- const r=S.inv.filter(i=>!q||[i.id,i.unique_id,i.email,i.customer_email,i.status].some(x=>String(x??'').toLowerCase().includes(q)));
- return `<input id="q" placeholder="Search invoice ID, email, status" value="${esc(S.q)}" oninput="S.q=this.value;sl()">
- <div class="card" id="L">${rows(r)}</div>`}
-function rows(r){return r.slice(0,100).map(i=>`<div class="inv" onclick="detail('${esc(i.id)}')"><div><div>#${esc(i.id)} <span class="pill ${esc(String(i.status).toLowerCase())}">${esc(i.status||'?')}</span></div>
- <div class="k">${esc(i.email||i.customer_email||'')} · ${when(i).toLocaleString()}</div></div><b class="amt">${money(amt(i))}</b></div>`).join('')||'<div class="k">No matches.</div>'}
-function sl(){const q=S.q.toLowerCase();$('#L').innerHTML=rows(S.inv.filter(i=>!q||[i.id,i.unique_id,i.email,i.customer_email,i.status].some(x=>String(x??'').toLowerCase().includes(q))))}
-async function detail(id){S.open={id,loading:true};render();
- try{S.open={id,data:await api(`/shops/${S.shop}/invoices/${id}`)}}catch(e){S.open={id,error:e.message}}render()}
-function modal(){const o=S.open;if(!o)return'';
- return `<div class="card" style="position:fixed;inset:12px;overflow:auto;z-index:9;margin:0;background:var(--sf2)">
- <div class="row sp"><b>Invoice #${esc(o.id)}</b><button class="g" onclick="S.open=null;render()">Close</button></div>
- ${o.loading?'<p class="k">Loading…</p>':o.error?`<p class="err">${esc(o.error)}</p>`:`<pre>${esc(JSON.stringify(o.data,null,2))}</pre>`}
- <button onclick="navigator.clipboard&&navigator.clipboard.writeText('${esc(o.id)}')">Copy invoice ID</button></div>`}
-function settings(){return `<div class="card"><div class="k">Shop</div><select onchange="S.shop=this.value;ls.s('sa_shop',this.value);loadInvoices()">
- ${S.shops.map(s=>`<option value="${esc(s.id)}" ${s.id==S.shop?'selected':''}>${esc(s.name||s.id)}</option>`).join('')}</select>
- <div class="k" style="margin-top:12px">Currency</div><select onchange="S.cur=this.value;ls.s('sa_cur',this.value);render()">
- ${['USD','EUR','GBP','CAD','AUD'].map(c=>`<option ${c==S.cur?'selected':''}>${c}</option>`).join('')}</select></div>
- <div class="card"><button class="g" onclick="S.hide=!S.hide;ls.s('sa_hide',S.hide?1:'');render()">${S.hide?'Show':'Hide'} amounts</button></div>
- <div class="card"><button class="g" onclick="logout()">Log out and forget API key</button></div>
- <div class="k">Unofficial app. Your key stays on this device and is only sent to api.sellauth.com.</div>`}
-function render(){const a=$('#app');document.body.className=S.hide?'hide':'';
- if(!S.key||!S.shops.length){a.innerHTML=`<h1>SellAuth dashboard (unofficial)</h1><div class="big">Sign in</div>
- <p class="k">Paste an API key from your SellAuth account settings.</p><input id="k" type="password" placeholder="API key" autocomplete="off"><br><br>
- <button onclick="login()">Connect</button><div class="err">${esc(S.err)}</div>`;return}
- const pane={home,list,settings}[S.tab]();
- a.innerHTML=`<div class="row sp"><h1>${esc(S.shops.find(s=>s.id==S.shop)?.name||'Shop')}</h1><button class="g" onclick="loadInvoices()">${S.loading?'Loading…':'Refresh'}</button></div>
- ${S.err?`<div class="err">${esc(S.err)}</div>`:''}${pane}${modal()}
- <nav>${[['home','Income'],['list','Invoices'],['settings','Settings']].map(([t,l])=>`<button class="${S.tab==t?'on':''}" onclick="S.tab='${t}';render()">${l}</button>`).join('')}</nav>`}
-S.hide=!!ls.g('sa_hide');S.cur=ls.g('sa_cur')||'USD';S.key=ls.g('sa_key')||'';
-render();if(S.key){setTimeout(login,0)}
-
-setInterval(()=>{if(S.key&&S.shop&&!S.loading&&!S.open)loadInvoices()},120000);
+  if(!S.shops.find(s=>String(s.id)==String(S.shop)))S.shop=S.shops[0]?.id;ls.s('sa_shop',S.shop);syncRunner();await loadInvoices()}catch(e){S.err=e.message;render()}}
+function logout(){runner('saveConfig',{on:false,key:'',shop:''});ls.s('sa_key','');S.key='';S.inv=[];S.shops=[];S.first=true;render()}
+function switchShop(v){S.shop=v;ls.s('sa_shop',v);syncRunner();S.inv=[];S.first=true;loadInvoices()}
+let tm;function timer(){clearInterval(tm);if(P.every>0)tm=setInterval(()=>{if(S.key&&S.shop&&!S.loading&&!S.open&&!S.locked&&document.activeElement.tagName!='INPUT')loadInvoices(true)},P.every*1000)}
+/* ranges */
+function range(p){const n=new Date(),o=+new Date(n.getFullYear(),n.getMonth(),n.getDate());
+ return{today:{s:o,e:o+D,step:H,n:24},'7d':{s:o-6*D,e:o+D,step:D,n:7},'30d':{s:o-29*D,e:o+D,step:D,n:30},'90d':{s:o-89*D,e:o+D,step:D,n:90},all:{s:o+D-182*D,e:o+D,step:7*D,n:26}}[p]}
+const inR=(i,a,b)=>{const t=+when(i);return t>=a&&t<b};
+const chips=()=>`<div class="seg">${[['today','Today'],['7d','7 days'],['30d','30 days'],['90d','90 days'],['all','All']].map(([v,l])=>`<button class="${P.per==v?'on':''}" onclick="S.sel=null;setP('per','${v}')">${l}</button>`).join('')}</div>`;
+function chart(sr,r){const W=340,Hh=120,n=sr.length,mx=Math.max(...sr,1),bw=W/n,k=S.sel!=null&&S.sel<n?S.sel:n-1;let g;
+ if(P.chart=='bars')g=sr.map((v,j)=>`<rect x="${j*bw+bw*.15}" y="${Hh-v/mx*Hh}" width="${bw*.7}" height="${Math.max(v/mx*Hh,1.5)}" rx="${Math.min(3,bw/4)}" class="${j==k?'hl':''}"/>`).join('');
+ else{const d=sr.map((v,j)=>(j?'L':'M')+((j+.5)*bw).toFixed(1)+' '+(Hh-v/mx*(Hh-6)-3).toFixed(1)).join('');g=`<path d="${d}L${W} ${Hh}L0 ${Hh}Z" class="ar"/><path d="${d}" class="ln"/><line x1="${(k+.5)*bw}" x2="${(k+.5)*bw}" y1="0" y2="${Hh}" class="sl"/>`}
+ const dt=new Date(r.s+k*r.step),lb=P.per=='today'?dt.getHours()+':00':dt.toLocaleDateString(undefined,{day:'numeric',month:'short'});
+ return `<div class="ch amt"><div class="cl"><span>${lb}</span><b>${money(sr[k])}</b></div><svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" onpointerdown="pick(event,${n})">${g}</svg></div>`}
+function pick(e,n){const b=e.currentTarget.getBoundingClientRect();S.sel=Math.min(n-1,Math.max(0,Math.floor((e.clientX-b.left)/b.width*n)));render()}
+function invRow(i){return `<div class="inv" onclick="detail('${esc(i.id)}')"><div class="av">${esc((mail(i)||'#')[0].toUpperCase())}</div><div><div class="ov">${esc(mail(i)||'#'+i.id)}</div><div class="k">#${esc(i.id)} · <span class="${st(i)}">${esc(st(i)||'?')}</span> · ${when(i).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div><b class="amt">${money(amt(i))}</b></div>`}
+function home(){const r=range(P.per),R=S.inv.filter(rev),cur=R.filter(i=>P.per=='all'||inR(i,r.s,r.e)),total=cur.reduce((a,i)=>a+amt(i),0);
+ let dl='';if(P.per!='all'){const len=r.e-r.s,pv=R.filter(i=>inR(i,r.s-len,r.s)).reduce((a,i)=>a+amt(i),0);
+  if(pv>0){const d=(total-pv)/pv*100;dl=`<span class="dl ${d>=0?'up':'dn'}">${d>=0?'▲':'▼'} ${Math.abs(d).toFixed(0)}% vs previous</span>`}else if(total>0)dl='<span class="dl up">New this period</span>'}
+ const sr=Array(r.n).fill(0);R.forEach(i=>{const t=+when(i);if(t>=r.s&&t<r.e)sr[Math.floor((t-r.s)/r.step)]+=amt(i)});
+ const other=S.inv.filter(i=>!rev(i)&&(P.per=='all'||inR(i,r.s,r.e))).length,bi=sr.indexOf(Math.max(...sr)),bd=new Date(r.s+bi*r.step);
+ return chips()+`<div class="card"><div class="k">Revenue</div><div class="big amt" onclick="setP('hide',!P.hide)">${money(total)}</div>${dl}${chart(sr,r)}</div>
+ <div class="grid"><div class="card"><div class="k">Orders</div><div class="v">${cur.length}</div></div><div class="card"><div class="k">Average order</div><div class="v amt">${money(cur.length?total/cur.length:0)}</div></div>
+ <div class="card"><div class="k">Best ${P.per=='today'?'hour':P.per=='all'?'week':'day'}</div><div class="v amt">${Math.max(...sr)>0?money(Math.max(...sr)):'-'}</div><div class="k">${Math.max(...sr)>0?(P.per=='today'?bd.getHours()+':00':bd.toLocaleDateString(undefined,{day:'numeric',month:'short'})):''}</div></div>
+ <div class="card"><div class="k">Unpaid / other</div><div class="v">${other}</div></div></div>
+ <div class="card"><h2>Recent sales</h2>${R.slice().sort((a,b)=>when(b)-when(a)).slice(0,5).map(invRow).join('')||'<div class="empty">No sales yet.</div>'}</div>`}
+function filt(){const q=S.q.toLowerCase();return S.inv.filter(i=>(S.f=='all'||(S.f=='paid'?done(i):S.f=='pending'?st(i)=='pending':!done(i)&&st(i)!='pending'))&&(!q||[i.id,i.unique_id,mail(i),st(i)].some(x=>String(x??'').toLowerCase().includes(q)))).sort((a,b)=>when(b)-when(a))}
+function rows(r){if(!r.length)return '<div class="empty">No invoices match.</div>';const t={};r.filter(rev).forEach(i=>{const d=when(i).toDateString();t[d]=(t[d]||0)+amt(i)});let day='';
+ return r.slice(0,150).map(i=>{const d=when(i).toDateString();let h='';if(d!=day){day=d;h=`<div class="day"><span>${when(i).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'})}</span><span class="amt">${money(t[d]||0)}</span></div>`}return h+invRow(i)}).join('')}
+function list(){return `<input type="text" id="q" placeholder="Search invoice ID, email or status" value="${esc(S.q)}" oninput="S.q=this.value;$('#L').innerHTML=rows(filt())">
+ <div class="chips">${[['all','All'],['paid','Paid'],['pending','Pending'],['other','Cancelled / other']].map(([v,l])=>`<button class="${S.f==v?'on':''}" onclick="S.f='${v}';render()">${l}</button>`).join('')}</div><div class="card" id="L" style="margin-top:0">${rows(filt())}</div>`}
+function rank(t,m,mn=1){const e=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5);if(!e.length)return '';const mx=e[0][1]||1;
+ return `<div class="card"><h2>${t}</h2>${e.map(([k,v])=>`<div class="rk"><div class="rb" style="width:${v/mx*100}%"></div><span class="ov">${esc(k)}</span><b class="amt">${mn?money(v):v}</b></div>`).join('')}</div>`}
+function ins(){const r=range(P.per),all=S.inv.filter(i=>P.per=='all'||inR(i,r.s,r.e)),R=all.filter(rev),c={},g={},s={},w={},wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+ R.forEach(i=>{const e=mail(i)||'Unknown',m=i.gateway||i.payment_method||i.method;c[e]=(c[e]||0)+amt(i);if(m)g[m]=(g[m]||0)+amt(i);const d=wd[when(i).getDay()];w[d]=(w[d]||0)+amt(i)});all.forEach(i=>s[st(i)||'?']=(s[st(i)||'?']||0)+1);
+ return chips()+(rank('Top customers',c)+rank('Payment methods',g)+rank('Best weekdays',w)+rank('Invoice status',s,0)||'<div class="empty">No data in this period.</div>')}
+const row=(t,d,c)=>`<div class="sr"><div><div>${t}</div>${d?`<div class="k">${d}</div>`:''}</div>${c}</div>`;
+const sel=(k,o,n)=>`<select onchange="setP('${k}',${n?'+this.value':'this.value'})">${o.map(([v,l])=>`<option value="${v}" ${P[k]==v?'selected':''}>${l}</option>`).join('')}</select>`;
+const tog=k=>`<label class="sw"><input type="checkbox" ${P[k]?'checked':''} onchange="setP('${k}',this.checked)"><i></i></label>`;
+function setPin(){if(P.pin){if(confirm('Remove PIN lock?'))setP('pin','');return}const p=prompt('Choose a 4-digit PIN');if(p&&/^\d{4}$/.test(p)){setP('pin',hash(p));toast('PIN lock on')}else if(p!==null)toast('PIN must be 4 digits')}
+function csv(){const r=[['id','date','status','email','amount']].concat(filt().map(i=>[i.id,when(i).toISOString(),st(i),mail(i),amt(i)]));
+ copy(r.map(x=>x.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n'));toast('CSV copied: '+(r.length-1)+' invoices')}
+function set(){return `<div class="card"><h2>Appearance</h2>${row('Theme','',sel('theme',[['dark','Dark'],['amoled','AMOLED black'],['light','Light']]))}
+ ${row('Accent color','',['#7c8cff','#3ddc97','#f5b942','#ff6b8b','#4cc3ff'].map(c=>`<button class="dot ${P.accent==c?'on':''}" style="background:${c}" onclick="setP('accent','${c}')"></button>`).join(''))}
+ ${row('Chart style','',sel('chart',[['bars','Bars'],['line','Line']]))}${row('Short numbers','12.3K instead of 12,345.00',tog('compact'))}</div>
+ <div class="card"><h2>Data</h2>${row('Shop','',`<select onchange="switchShop(this.value)">${S.shops.map(s=>`<option value="${esc(s.id)}" ${s.id==S.shop?'selected':''}>${esc(s.name||s.id)}</option>`).join('')}</select>`)}
+ ${row('Currency','Display only, no conversion',sel('cur',['USD','EUR','GBP','CAD','AUD','CHF','SEK','PLN'].map(c=>[c,c])))}
+ ${row('Count pending as revenue','',tog('pend'))}${row('Invoices to load','More is slower',sel('limit',[[300,'300'],[750,'750'],[1500,'1,500'],[3000,'3,000']],1))}
+ ${row('Auto refresh','',sel('every',[[0,'Off'],[60,'1 min'],[120,'2 min'],[300,'5 min']],1))}${row('New sale vibration','',tog('haptics'))}</div>
+ <div class="card"><h2>Notifications</h2>${row('New sale alerts','Checked about every 15 min, even when the app is closed',`<label class="sw"><input type="checkbox" ${P.notif?'checked':''} onchange="toggleNotif(this.checked)"><i></i></label>`)}${row('Show amount','Turn off to keep amounts off your lock screen',tog('notifAmt'))}${row('Test notification','',`<button class="g" onclick="testNotif()">Send</button>`)}</div>
+ <div class="card"><h2>Privacy</h2>${row('Hide amounts','Or tap the big revenue number',tog('hide'))}${row('PIN lock','Locks when you leave the app',`<button class="g" onclick="setPin()">${P.pin?'Remove':'Set PIN'}</button>`)}</div>
+ <div class="card"><h2>Tools</h2>${row('Copy invoices as CSV','Uses the filter in Invoices',`<button class="g" onclick="csv()">Copy</button>`)}
+ ${row('Log out','Removes the API key from this device',`<button class="g" onclick="logout()">Log out</button>`)}</div>
+ <div class="k" style="text-align:center">Unofficial app, not affiliated with SellAuth.</div>`}
+async function detail(id){S.open={id,base:S.inv.find(i=>String(i.id)==String(id))};render();
+ try{const d=await api(`/shops/${S.shop}/invoices/${id}`);if(S.open&&S.open.id==id){S.open.data=d.data||d;render()}}catch(e){}}
+function sheet(){const o=S.open;if(!o)return '';const d={...(o.base||{}),...(o.data||{})},its=d.items||d.products,m=d.gateway||d.payment_method||d.method,cp=d.coupon_code||(d.coupon&&d.coupon.code);
+ const R=[['Status',`<span class="pill ${st(d)}">${esc(d.status||'?')}</span>`],['Amount',`<b class="amt">${money(amt(d))}</b>`],['Email',esc(mail(d)||'-')],['Date',when(d).toLocaleString()]];
+ if(m)R.push(['Payment',esc(m)]);if(cp)R.push(['Coupon',esc(cp)]);if(Array.isArray(its)&&its.length)R.push(['Items',its.map(x=>esc((x.product&&x.product.name)||x.name||'Item')).join(', ')]);
+ return `<div class="bd" onclick="S.open=null;render()"></div><div class="sh"><div class="row sp"><h1>Invoice #${esc(d.id||o.id)}</h1><button class="g" onclick="S.open=null;render()">Close</button></div>
+ <div style="margin:10px 0">${R.map(([a,b])=>row(`<span class="k">${a}</span>`,'',`<span style="text-align:right">${b}</span>`)).join('')}</div>
+ <div class="row"><button class="btn" onclick="copy('${esc(d.id||o.id)}')">Copy ID</button>${mail(d)?`<button class="btn" style="background:var(--sf2);color:var(--tx)" onclick="copy('${esc(mail(d))}')">Copy email</button>`:''}</div>
+ <details style="margin-top:14px"><summary class="k">Raw data</summary><pre style="white-space:pre-wrap;word-break:break-all;font-size:12px;color:var(--mu)">${esc(JSON.stringify(d,null,2))}</pre></details></div>`}
+const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',list:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z M9 8h6 M9 12h6"/>',ins:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',set:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'};
+function key(k){if(k=='⌫')S.pd=S.pd.slice(0,-1);else S.pd=(S.pd+k).slice(0,4);S.err='';
+ if(S.pd.length==4){if(hash(S.pd)==P.pin){S.locked=false;S.pd='';if(S.key&&!S.shops.length){login();return}}else{S.err='Wrong PIN';S.pd=''}}render()}
+function render(){document.documentElement.dataset.t=P.theme;document.documentElement.style.setProperty('--ac',P.accent);document.body.className=P.hide?'hide':'';const a=$('#app');
+ if(S.locked){a.innerHTML=`<div class="lk"><h1>Enter PIN</h1><div class="dots">${[0,1,2,3].map(k=>`<i class="${k<S.pd.length?'on':''}"></i>`).join('')}</div><div class="kp">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>`<button ${k===''?'disabled style="visibility:hidden"':''} onclick="key('${k}')">${k}</button>`).join('')}</div><div class="err">${esc(S.err)}</div></div>`;return}
+ if(!S.key||!S.shops.length){a.innerHTML=`<div style="padding-top:48px"><h1>SellAuth dashboard</h1><div class="big" style="font-size:38px">Sign in</div><p class="k">Paste an API key from your SellAuth account settings. It stays on this device.</p>
+  <input type="password" id="k" placeholder="API key" autocomplete="off"><br><br><button class="btn" onclick="login()">Connect</button><div class="err">${esc(S.err)}</div><p class="k">Unofficial app, not affiliated with SellAuth.</p></div>`;return}
+ const sk=S.loading&&!S.inv.length&&!S.err,pane=sk?'<div class="sk"></div><div class="sk"></div><div class="sk"></div>':{home,list,ins,set}[S.tab]();
+ a.innerHTML=`<div class="row sp"><div><h1>${esc((S.shops.find(s=>s.id==S.shop)||{}).name||'Shop')}</h1><div class="k">${S.upd?'Updated '+S.upd.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'Loading…'}</div></div><button class="g ${S.loading?'spin':''}" onclick="loadInvoices()" aria-label="Refresh">⟳</button></div>
+ ${S.err?`<div class="err">${esc(S.err)} <a href="#" onclick="loadInvoices();return false" style="color:var(--ac)">Retry</a></div>`:''}${pane}${sheet()}
+ <nav>${[['home','Home'],['list','Invoices'],['ins','Insights'],['set','Settings']].map(([t,l])=>`<button class="${S.tab==t?'on':''}" onclick="S.tab='${t}';scrollTo(0,0);render()"><svg viewBox="0 0 24 24">${IC[t]}</svg>${l}</button>`).join('')}</nav>`}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&P.pin){S.locked=true;S.pd='';render()}});
+render();timer();if(S.key&&!S.locked)login();
 </script></body></html>
