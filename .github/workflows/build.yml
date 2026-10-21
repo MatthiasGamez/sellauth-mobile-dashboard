@@ -23,6 +23,25 @@ jobs:
           mkdir -p android/app/libs android/capacitor-cordova-android-plugins/src/main/libs
           cp "$AAR" android/app/libs/
           cp "$AAR" android/capacitor-cordova-android-plugins/src/main/libs/
+      - name: Align JVM targets
+        run: |
+          echo "kotlin.jvm.target.validation.mode=warning" >> android/gradle.properties
+          cat >> android/build.gradle <<'GRADLE'
+
+          subprojects {
+              afterEvaluate { p ->
+                  if (p.hasProperty('android')) {
+                      p.android.compileOptions {
+                          sourceCompatibility JavaVersion.VERSION_17
+                          targetCompatibility JavaVersion.VERSION_17
+                      }
+                  }
+                  p.tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.configureEach {
+                      kotlinOptions { jvmTarget = '17' }
+                  }
+              }
+          }
+          GRADLE
       - run: npx cap sync android
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
