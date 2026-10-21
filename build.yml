@@ -10,7 +10,20 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
       - run: npm install
-      - run: npx cap add android && npx cap sync android
+      - run: npx cap add android
+      - name: Android permissions and SDK
+        run: |
+          sed -i 's#</manifest>#    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n</manifest>#' android/app/src/main/AndroidManifest.xml
+          sed -i 's/minSdkVersion = 2[0-9]/minSdkVersion = 24/' android/variables.gradle
+      - name: Copy background runner JS engine
+        run: |
+          AAR=$(find node_modules -name 'android-js-engine-release.aar' | head -n 1)
+          echo "Found: $AAR"
+          test -n "$AAR"
+          mkdir -p android/app/libs android/capacitor-cordova-android-plugins/src/main/libs
+          cp "$AAR" android/app/libs/
+          cp "$AAR" android/capacitor-cordova-android-plugins/src/main/libs/
+      - run: npx cap sync android
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
