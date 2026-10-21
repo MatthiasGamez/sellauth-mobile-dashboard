@@ -17,7 +17,7 @@ An unofficial Android app to check your [SellAuth](https://sellauth.com) shop fr
 
 ## Download
 
-Go to the **Releases** page and download `app-debug.apk`, or build it yourself (see below).
+Go to the **(Releases)[https://github.com/MatthiasGamez/sellauth-mobile-dashboard/releases]** page and download `app-debug.apk`, or build it yourself (see below).
 
 Install steps:
 1. Open the APK on your Android phone.
