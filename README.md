@@ -13,7 +13,8 @@ An unofficial Android app to check your [SellAuth](https://sellauth.com) shop fr
 - **Privacy mode**: blur all amounts with one tap
 - **Currency choice**: USD, EUR, GBP, CAD, AUD
 - **Auto refresh** every 2 minutes
-- Dark theme, built for one-handed phone use
+- **Notifications** for new sales (also when the app is closed, checked about every 15 minutes)
+- Dark, AMOLED and light themes, accent colors, PIN lock
 
 ## Download
 
@@ -43,6 +44,10 @@ npx cap sync android
 cd android && ./gradlew assembleDebug
 ```
 The APK ends up in `android/app/build/outputs/apk/debug/`.
+
+## Notifications
+
+Enable them in **Settings > Notifications** and allow the Android permission. A background task checks your shop roughly every 15 minutes (Android decides the exact timing). For reliable alerts, set the app's battery usage to **Unrestricted** in Android settings. Notifications only work in the Android app, not in a browser.
 
 ## Privacy and security
 
