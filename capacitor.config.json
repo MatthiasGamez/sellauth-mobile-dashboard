@@ -1,0 +1,2 @@
+{"appId":"com.unofficial.sellauthdash","appName":"SA Dashboard","webDir":"www",
+"plugins":{"CapacitorHttp":{"enabled":true}},"android":{"backgroundColor":"#0e1116"}}
